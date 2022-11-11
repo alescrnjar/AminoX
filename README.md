@@ -10,6 +10,8 @@ The input dataset is generated with ProtGPT2, a language model trained on protei
 
 The input data is the organised in minibatches of length 100, corresponding to the minimum length of the sequences. Each minibatch correspond to a sequence where, in turn, each aminoacid is substituted with the character '?' to represent a missing aminoacid, and its target output will be the unmodified sequence. 
 
+After training epochs, predictions are made over the test set. For each amino acid in this dataset, the whole list of aminoacids is shown, in decreasing order of prediction likelihood. A prediction matrix is also plotted, in order to show how aminoacids are correctly/incorrectly predicted.
+
 AminoX is adapted from Unit 6/7 of this NLP tutorial: https://learn.microsoft.com/en-us/training/modules/intro-natural-language-processing-pytorch/1-introduction
 
 # Required Libraries
