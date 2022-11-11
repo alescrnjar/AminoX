@@ -26,6 +26,8 @@ Python modules required:
 
 * matplotlib.pyplot >= 3.4.3
 
+* transformers >= 4.22.2 (required by Protgpt2_seq_gen.py)
+
 # Example Prediction Matrix
 
 <p align="center">
