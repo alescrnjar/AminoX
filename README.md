@@ -25,5 +25,5 @@ Python modules required:
 # Example Prediction Matrix
 
 <p align="center">
-<img width="200" src=https://github.com/alescrnjar/AminoX/blob/main/example_output/Prediction_Matrix.png>
+<img width="750" src=https://github.com/alescrnjar/AminoX/blob/main/example_output/Prediction_Matrix.png>
 </p>
