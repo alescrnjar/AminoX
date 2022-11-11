@@ -20,6 +20,8 @@ Python modules required:
 
 * torch >= 1.12.1+cu116
 
+* torchtext >= 0.13.1
+
 * matplotlib.pyplot >= 3.4.3
 
 # Example Prediction Matrix
