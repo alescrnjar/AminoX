@@ -2,7 +2,9 @@
 
 AminoX is a natural language processing (NLP) recurrent neural network (RNN) for the determination of a single missing aminoacid in a given input primary sequence:
 
-'SPSSLSTNTTSA ? PTLTSEPR' to 'SPSSLSTNTTSA S PTLTSEPR'
+<p align="center">
+'SPSSLSTNTTSA ? PTLTSEPR'   to  'SPSSLSTNTTSA S PTLTSEPR'
+</p>
 
 The input dataset is generated with ProtGPT2, a language model trained on protein space (https://huggingface.co/nferruz/ProtGPT2). Protgpt2_seq_gen.py allows for the generation of N different aminoacid sequences, of length comprised between a settable minimum (100) and a settable maximum (300).
 
@@ -22,4 +24,6 @@ Python modules required:
 
 # Example Prediction Matrix
 
+<p align="center">
 ![alt text](https://github.com/alescrnjar/AminoX/blob/main/example_output/Prediction_Matrix.png)
+</p>
