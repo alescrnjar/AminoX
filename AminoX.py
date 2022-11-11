@@ -1,16 +1,10 @@
-import torch
-import torchtext
-from torchinfo import summary
 import sys
 sys.path.append('./src')
-from functions import *
+from model import *
 from plots import *
 #
 import numpy as np
-import random
 import os
-#
-import collections
 #
 from tensorboardX import SummaryWriter
 #
@@ -47,86 +41,10 @@ print("Device:",device)
 
 print("Output will be written in:",args.output_directory)
 if not os.path.exists(args.output_directory): os.system('mkdir '+args.output_directory)
-
-all_amino=['A','C','D','E','F','G','H','K','I','L','M','N','P','Q','R','S','T','V','W','Y'] #all aminoacids in alphabetical order
-
-def char_tokenizer(characters):
-    return list(characters) 
-
-def build_vocab(ngrams=1,min_freq=1):
-    counter=collections.Counter()
-    counter.update(torchtext.data.utils.ngrams_iterator(char_tokenizer(all_amino+['?']),ngrams=ngrams)) 
-    vocab = torchtext.vocab.vocab(counter, min_freq=min_freq)
-    return vocab
-vocab=build_vocab()
-    
-def encode(x):
-    return torch.LongTensor([vocab.get_stoi().get(s,0) for s in char_tokenizer(x)])
-
-def load_dataset(): 
-    inpf=open(args.input_directory+args.input_name,'r')
-    sequences=[]
-    for line in inpf.readlines():
-        if args.remove_n:
-            sequences.append(line.replace('\n','').replace('n','').replace('X',''))
-        else:
-            sequences.append(line)
-    half_Nwanted=len(sequences)
-
-    all_data=[]
-    ndata=0
-    for seq in sequences:
-        for i in range(len(seq)-ntoks): 
-            shortened_seq = seq[i:i+ntoks]
-            for n in range(ntoks): 
-                shortened_seq_with_missing = shortened_seq # This is necessary not to keep track of previous aminoacids assigned as '?'
-                shortened_seq_with_missing = shortened_seq_with_missing[0:n]+'?'+shortened_seq_with_missing[n+1:]
-                if (ndata < (args.max_input_data + args.max_eval_data) ):
-                    all_data.append((encode(shortened_seq_with_missing),encode(shortened_seq),shortened_seq))
-                    ndata+=1
-    print("Data size:",len(all_data))
-    
-    train_data=[]
-    test_data=[]
-    for i in range(len(all_data)):
-        if (i<args.max_input_data):
-            train_data.append(all_data[i])
-        else:
-            test_data.append(all_data[i])
-            
-
-    return train_data,test_data
-
-class LSTM_Filler(torch.nn.Module):
-    def __init__(self, vocab_size, hidden_dim):
-        super().__init__()
-        self.rnn1 = torch.nn.LSTM(vocab_size, hidden_dim, batch_first=True)
-        self.fc = torch.nn.Linear(hidden_dim, vocab_size)
-    def forward(self, x, s=None):
-        x = torch.nn.functional.one_hot(x,vocab_size).to(torch.float32)
-        x,s = self.rnn1(x,s)
-        return self.fc(x),s 
-
-def evaluate(net, example):
-    
-    n = random.randint(0,len(example)-1)
-    text_1 = example
-    text_1 = text_1[0:n]+'?'+text_1[n+1:]
-    test_out,s = net(encode(text_1).to(device))
-    index = torch.argmax(test_out[n]) 
-    amino = vocab.get_itos()[index]
-    expected = example[n] 
-    
-    test_out_line_sorted, indexes = torch.sort(test_out[n],descending=True)
-    descending_aminos = []
-    for index in indexes:
-        descending_aminos.append(vocab.get_itos()[index])
-    return amino , expected , descending_aminos
-    
+   
 ### ### ### ### ### ### ### MAIN
 
-
-train_dataset,test_dataset = load_dataset()
+train_dataset,test_dataset = load_dataset(args.input_directory+args.input_name, args.remove_n, args.max_input_data, args.max_eval_data, ntoks)
 
 data_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
 print("Number of batches:",len(data_loader))
