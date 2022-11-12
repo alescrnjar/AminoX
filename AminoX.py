@@ -79,8 +79,12 @@ def main():
             print("{}/{}: loss = {}".format(epoch_idx,args.n_epochs,l_mean)) 
 
     plot_losses(Loss_average, args.output_directory)
-            
+
+    # Evaluate model
+
     print("Evaluation:")
+
+    # Initialize prediction matrix
     prediction_matrix = []
     for a1 in all_amino:
         prediction_matrix.append([])
@@ -90,7 +94,7 @@ def main():
     for a2 in all_amino:
         n_predictions_per_amino[a2] = 0
 
-    net.eval() #TODO 
+    net.eval() 
     count = 0
     rate = 0.
     for test in test_dataset:
@@ -103,6 +107,7 @@ def main():
             prediction_matrix[all_amino.index(predicted_amino)][all_amino.index(expected_amino)] += 1
             n_predictions_per_amino[expected_amino] += 1
 
+    # Normalize elements of prediction matrix 
     for a1 in all_amino:
         for a2 in all_amino:
             if n_predictions_per_amino[a2] != 0 : prediction_matrix[all_amino.index(a1)][all_amino.index(a2)] /= n_predictions_per_amino[a2]

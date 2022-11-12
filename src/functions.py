@@ -2,6 +2,7 @@ import torch
 import torchtext
 #from torchinfo import summary
 import collections
+import random
 
 all_amino=['A','C','D','E','F','G','H','K','I','L','M','N','P','Q','R','S','T','V','W','Y'] #all aminoacids in alphabetical order
 
@@ -26,7 +27,7 @@ def load_dataset(inputfile, remove_n, max_input_data, max_eval_data, ntoks):
             sequences.append(line.replace('\n','').replace('n','').replace('X',''))
         else:
             sequences.append(line)
-    half_Nwanted=len(sequences)
+    random.shuffle(sequences)
 
     all_data=[]
     ndata=0
@@ -44,7 +45,8 @@ def load_dataset(inputfile, remove_n, max_input_data, max_eval_data, ntoks):
     train_data=[]
     test_data=[]
     for i in range(len(all_data)):
-        if (i<max_input_data):
+        if (i < max_input_data):
+        #if (i > max_eval_data):
             train_data.append(all_data[i])
         else:
             test_data.append(all_data[i])
