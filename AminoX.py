@@ -41,23 +41,20 @@ def main():
     print("Output will be written in:",args.output_directory)
     if not os.path.exists(args.output_directory): os.system('mkdir '+args.output_directory)
     
-    ### ### ### ### ### ### ### MAIN
-
+    # Load datasets.
     train_dataset,test_dataset = load_dataset(args.input_directory+args.input_name, args.remove_n, args.max_input_data, args.max_eval_data, ntoks)
-
     data_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
     print("Number of batches:",len(data_loader))
-
     print("{} training sequences, {} test sequences".format(len(train_dataset),len(test_dataset)))
-
     vocab_size = len(vocab)
-
     print("Vocabulary:", vocab.get_stoi())
 
+    # Define model
     net = LSTM_Filler(vocab_size, args.hidden_dim).to(device)
-
     optimizer = torch.optim.Adam(net.parameters(),lr=args.learning_rate)
     loss_fn = torch.nn.CrossEntropyLoss()
+
+    # Train model
     net.train() 
     Loss_average = []
     for epoch_idx in range(args.n_epochs):
@@ -81,8 +78,8 @@ def main():
     plot_losses(Loss_average, args.output_directory)
 
     # Evaluate model
-
     print("Evaluation:")
+    net.eval() 
 
     # Initialize prediction matrix
     prediction_matrix = []
@@ -94,12 +91,11 @@ def main():
     for a2 in all_amino:
         n_predictions_per_amino[a2] = 0
 
-    net.eval() 
     count = 0
     rate = 0.
     for test in test_dataset:
         example=test[2]
-        for t in range(3):
+        for t in range(3): # For each example sequence, test three randomly-assigned missing aminoacids
             count += 1
             predicted_amino, expected_amino , descending_predictions = evaluate(net, example)
             print("Predicted: {} Expected: {} ({})".format(predicted_amino, expected_amino, descending_predictions))
