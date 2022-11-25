@@ -75,6 +75,8 @@ def main():
         if epoch_idx % args.log_freq == 0:
             print("{}/{}: loss = {}".format(epoch_idx,args.n_epochs,l_mean)) 
 
+    torch.save(net.state_dict(), args.output_directory+'model.pth')
+
     plot_losses(Loss_average, args.output_directory)
 
     # Evaluate model
