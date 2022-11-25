@@ -20,7 +20,7 @@ Python modules required:
 
 * numpy >= 1.22.3
 
-* torch >= 1.12.1+cu116
+* torch >= 1.12.1+cu116 (pip install torch==1.12.1+cu116 -f https://download.pytorch.org/whl/torch_stable.html)
 
 * torchtext >= 0.13.1
 
