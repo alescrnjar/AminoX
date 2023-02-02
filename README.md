@@ -1,6 +1,10 @@
 # AminoX
 
-AminoX is a Natural Language Processing (NLP) Recurrent Neural Network (RNN) for the determination of a single missing aminoacid in a given input primary sequence:
+<!-- TO DO:
+- more comments for functions
+-->
+
+AminoX is a Natural Language Processing (NLP) Recurrent Neural Network (RNN) making use of a Long Short Term Memory (LSTM) architecture for the determination of a single missing aminoacid in a given input primary sequence:
 
 <p align="center">
 'SPSSLSTNTTSA ? PTLTSEPR'   &#8594  'SPSSLSTNTTSA S PTLTSEPR'
